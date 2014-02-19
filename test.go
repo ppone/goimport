@@ -1,2 +1,2 @@
-package d
+package
  goimport
