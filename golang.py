@@ -8,7 +8,6 @@ import subprocess
         Prequisties need $GOPATH set and go binary in $PATH
 """
 
-#TODO change to commandline argument
 go_extension = ".go"
 current_directory = os.getcwd()
 package_to_install_dir = os.path.basename(current_directory)
