@@ -4,20 +4,29 @@ import os
 import re
 import subprocess
 
-'''
+"""
         Prequisties need $GOPATH set and go binary in $PATH
-'''
+"""
 
 #TODO change to commandline argument
 go_extension = ".go"
 current_directory = os.getcwd()
 package_to_install_dir = os.path.basename(current_directory)
 package_to_install_re = r"package(\s)+" + package_to_install_dir
-go_test = "go test"
-go_dir = os.environ["GOPATH"] + "/src/" + package_to_install_dir
+go_test = "go test oauth1"
+go_dir = os.environ["GOPATH"] + "/src/"
+go_dir_package = go_dir + package_to_install_dir + "/"
 go_install = "go install"
+make_dir_go_dir_package = "mkdir " + go_dir_package
+copy_files_from_cwd_to_go_path_src = "cp " + "*" + go_extension + " " + go_dir_package
 
 
+def run_command(command):
+    run_c = subprocess.getstatusoutput(command)
+    if run_c[0] != 0:
+        err_msg = "Error running command: " + run_c[1]
+        raise Exception(err_msg)
+    return run_c[1]
 
 def check_package_files_using_same_package_name_as_directory():
     """
@@ -39,31 +48,26 @@ def check_go_test_is_ok():
     """
         Make sure all go tests for the package run before we install the package
     """
-    test_result = subprocess.getstatusoutput(go_test)[1]
+    test_result = run_command(go_test)
     if 'ok' not in test_result:
         raise Exception("Please fix your Go Tests before you install package")
+
+def check_else_make_directory():
+    if not os.path.exists(go_dir_package):
+        run_command(make_dir_go_dir_package)
+
 
 check_package_files_using_same_package_name_as_directory()
 
 check_go_test_is_ok()
 
-copy_files_from_cwd_to_go_path_src = "cp " + ""
+check_else_make_directory()
 
+run_command(copy_files_from_cwd_to_go_path_src)
 
-packageinstalled = False
+os.chdir(go_dir_package)
 
-#
-# print(current_directory)
-# print("hello")
-# os.chdir("/")
-# print(os.getcwd)
-# godir = os.environ["GOPATH"] + "/src"
-# os.chdir(godir)
-# print("Current directory is ", os.getcwd())
-# for i in os.listdir():
-#         if i == packagetoinstall:
-#             packageinstalled = True
-#             break
+run_command(go_install)
 
-#if packageinstalled:
+print("Package " + package_to_install_dir + " successfully installed")
 
