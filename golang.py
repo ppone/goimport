@@ -7,7 +7,7 @@ import re
 import subprocess
 
 """
-        Prequisties need $GOPATH set and go binary in $PATH
+        Prequisties need $GOPATH set and GO binary in $PATH
 """
 
 go_extension = ".go"
@@ -23,6 +23,9 @@ copy_files_from_cwd_to_go_path_src = "cp " + "*" + go_extension + " " + go_dir_p
 
 
 def run_command(command):
+    """
+        We run a command and raise an exception if the command's exit status is not 0
+    """
     run_c = subprocess.getstatusoutput(command)
     if run_c[0] != 0:
         err_msg = "Error running command: " + run_c[1]
@@ -47,13 +50,16 @@ def check_package_files_using_same_package_name_as_directory():
 
 def check_go_test_is_ok():
     """
-        Make sure all go tests for the package run before we install the package
+        Make sure all GO tests for the package run before we install the package
     """
     test_result = run_command(go_test)
     if 'ok' not in test_result:
         raise Exception("Please fix your Go Tests before you install package")
 
 def check_else_make_directory():
+    """
+        check if the GO package directory exists else we make the directory
+    """
     if not os.path.exists(go_dir_package):
         run_command(make_dir_go_dir_package)
 
