@@ -20,6 +20,8 @@ goimport
 ```
 That is it.
 
+LICENSE
+
 The MIT License (MIT)
 
 Copyright (c) 2014 Parag Patel
