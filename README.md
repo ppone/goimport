@@ -3,7 +3,7 @@ goimport
 
 Install local Go packages.
 
-Requirements: Go binary needs to be in your $PATH, and $GOPATH needs to be setup.
+Requirements: Go binary needs to be in your $PATH, and $GOPATH needs to be setup. Python 3.3. 
 
 To install goimport so you can use it anywhere
 ```
